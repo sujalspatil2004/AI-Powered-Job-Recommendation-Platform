@@ -23,7 +23,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 
-// health check endpoint
+// health check endpoint for Railway
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "healthy" });
 });
