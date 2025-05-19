@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "ai-powered-job-match-platform",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,7 +18,9 @@
     "joi": "^17.5.0",
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^4.0.0",
     "mongoose": "^6.1.2",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "openai": "^4.100.0"
   }
 }

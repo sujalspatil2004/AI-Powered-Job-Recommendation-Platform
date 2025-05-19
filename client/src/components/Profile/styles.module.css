@@ -1,0 +1,178 @@
+.profile_container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100vh - 70px);
+    box-sizing: border-box;
+}
+
+.profile_form_container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+        0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form_container {
+    width: 100%;
+}
+
+.form_container h1 {
+    font-size: 32px;
+    margin: 0 0 20px 0;
+    color: #333;
+    text-align: center;
+}
+
+.completion_status {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.complete {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.incomplete {
+    color: #f34646;
+    font-weight: bold;
+}
+
+.completion_message {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.input_group {
+    margin-bottom: 20px;
+}
+
+.input_group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    border-color: #3bb19b;
+}
+
+.skills_container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.skills_container .input {
+    flex: 1;
+}
+
+.skills_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.skill_item {
+    background-color: #3bb19b;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.remove_btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.remove_btn:hover {
+    opacity: 1;
+}
+
+.add_btn {
+    padding: 12px 20px;
+    background-color: #3bb19b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.add_btn:hover {
+    background-color: #2d8f7b;
+}
+
+.error_msg,
+.success_msg {
+    width: 100%;
+    padding: 15px;
+    margin: 20px 0;
+    font-size: 14px;
+    border-radius: 8px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.error_msg {
+    background-color: #f34646;
+    color: white;
+}
+
+.success_msg {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.green_btn {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #3bb19b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+
+.green_btn:hover {
+    background-color: #2d8f7b;
+}
