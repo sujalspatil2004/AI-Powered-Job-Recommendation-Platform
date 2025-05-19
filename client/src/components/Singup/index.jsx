@@ -60,7 +60,7 @@ const Signup = () => {
         try {
             // Register user
             const registerUrl = `${process.env.REACT_APP_API_URL}/api/users`;
-            const { data: registerRes } = await axios.post(registerUrl, {
+            await axios.post(registerUrl, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
