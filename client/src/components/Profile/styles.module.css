@@ -7,11 +7,10 @@
 }
 
 .profile_form_container {
-    background-color: white;
+    background-color: var(--surface-color);
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
-        0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 4px var(--shadow-color);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -23,7 +22,7 @@
 .form_container h1 {
     font-size: 32px;
     margin: 0 0 20px 0;
-    color: #333;
+    color: var(--text-color);
     text-align: center;
 }
 
@@ -31,21 +30,22 @@
     text-align: center;
     margin-bottom: 20px;
     font-size: 16px;
+    color: var(--text-secondary);
 }
 
 .complete {
-    color: #4CAF50;
+    color: var(--success-color);
     font-weight: bold;
 }
 
 .incomplete {
-    color: #f34646;
+    color: var(--error-color);
     font-weight: bold;
 }
 
 .completion_message {
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 30px;
     font-size: 14px;
 }
@@ -57,23 +57,25 @@
 .input_group label {
     display: block;
     margin-bottom: 8px;
-    color: #333;
+    color: var(--text-color);
     font-weight: 500;
 }
 
 .input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
+    background-color: var(--surface-color);
+    color: var(--text-color);
 }
 
 .input:focus {
-    border-color: #3bb19b;
+    border-color: var(--primary-color);
 }
 
 .skills_container {
@@ -94,8 +96,8 @@
 }
 
 .skill_item {
-    background-color: #3bb19b;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
     padding: 6px 12px;
     border-radius: 20px;
     display: flex;
@@ -107,7 +109,7 @@
 .remove_btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--surface-color);
     cursor: pointer;
     font-size: 18px;
     padding: 0 2px;
@@ -124,8 +126,8 @@
 
 .add_btn {
     padding: 12px 20px;
-    background-color: #3bb19b;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -135,7 +137,7 @@
 }
 
 .add_btn:hover {
-    background-color: #2d8f7b;
+    background-color: var(--primary-hover);
 }
 
 .error_msg,
@@ -150,20 +152,20 @@
 }
 
 .error_msg {
-    background-color: #f34646;
-    color: white;
+    background-color: var(--error-color);
+    color: var(--surface-color);
 }
 
 .success_msg {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--success-color);
+    color: var(--surface-color);
 }
 
 .green_btn {
     width: 100%;
     padding: 12px 0;
-    background-color: #3bb19b;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
     border: none;
     border-radius: 8px;
     font-weight: bold;
@@ -174,5 +176,5 @@
 }
 
 .green_btn:hover {
-    background-color: #2d8f7b;
+    background-color: var(--primary-hover);
 }

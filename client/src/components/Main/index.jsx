@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 import styles from "./styles.module.css";
 import Jobs from "../Jobs";
 import Profile from "../Profile";
@@ -7,6 +8,7 @@ import Admin from "../Admin";
 const Main = () => {
     const [activeTab, setActiveTab] = useState('jobs');
     const [isAdmin, setIsAdmin] = useState(false);
+    const { isDarkMode, toggleTheme } = useTheme();
 
     useEffect(() => {
         const adminStatus = localStorage.getItem("isAdmin");
@@ -44,6 +46,13 @@ const Main = () => {
                             Admin
                         </button>
                     )}
+                    <button 
+                        className={styles.theme_btn} 
+                        onClick={toggleTheme}
+                        aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                    >
+                        {isDarkMode ? '☀️' : '🌙'}
+                    </button>
                     <button className={styles.white_btn} onClick={handleLogout}>
                         Logout
                     </button>
