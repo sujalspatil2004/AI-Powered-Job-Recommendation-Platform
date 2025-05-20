@@ -1,19 +1,20 @@
 const mongoose = require("mongoose");
 
-module.exports = () => {
-    // Set strictQuery to true to suppress the warning
-    mongoose.set('strictQuery', true);
-
+module.exports = async () => {
     const connectionParams = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     };
 
     try {
-        mongoose.connect(process.env.DB, connectionParams);
+        // Log the database URI to ensure it's correctly loaded
+        console.log('Database URI:', process.env.DB);
+
+        // Use async/await for better error handling
+        await mongoose.connect(process.env.DB, connectionParams);
         console.log("Connected to database successfully");
     } catch (error) {
-        console.log(error);
-        console.log("Could not connect database!");
+        console.error("Could not connect to database!", error);
+        throw error; // Re-throw the error if you want calling code to handle it
     }
 };
