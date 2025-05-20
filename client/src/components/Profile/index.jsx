@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
+import config from "../../config";
 
 const Profile = () => {
     const [data, setData] = useState({
@@ -32,8 +33,9 @@ const Profile = () => {
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem("token");
-            const config = { headers: { "Authorization": `Bearer ${token}` } };
-            const { data: response } = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/profile`, config);
+            const { data: response } = await axios.get(`${config.apiUrl}/api/users/profile`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
             setData({
                 location: response.location || "",
                 yearsOfExperience: response.yearsOfExperience || "",
@@ -98,11 +100,12 @@ const Profile = () => {
 
         try {
             const token = localStorage.getItem("token");
-            const config = { headers: { "Authorization": `Bearer ${token}` } };
             const { data: res } = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/users/profile`,
+                `${config.apiUrl}/api/users/profile`,
                 data,
-                config
+                {
+                    headers: { "Authorization": `Bearer ${token}` }
+                }
             );
             setMessage(res.message);
             setError("");

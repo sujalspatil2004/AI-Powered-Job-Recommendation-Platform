@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
+import config from "../../config";
 
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);
@@ -27,8 +28,9 @@ const Jobs = () => {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem("token");
-            const config = { headers: { "Authorization": `Bearer ${token}` } };
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/profile`, config);
+            const { data } = await axios.get(`${config.apiUrl}/api/users/profile`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
             setUser(data);
         } catch (error) {
             setError("Failed to fetch user profile");
@@ -38,7 +40,7 @@ const Jobs = () => {
     const fetchJobs = async () => {
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/jobs`, {
+            const { data } = await axios.get(`${config.apiUrl}/api/jobs`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setJobs(data);
@@ -53,7 +55,7 @@ const Jobs = () => {
         setRecommendationsLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/jobs/recommendations/me`, {
+            const { data } = await axios.get(`${config.apiUrl}/api/jobs/recommendations/me`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setRecommendations(data);
@@ -98,7 +100,8 @@ const Jobs = () => {
 
             <button 
                 className={styles.apply_btn}
-                onClick={() => window.open(job.applicationUrl, '_blank')}
+                disabled={true}
+                style={{ cursor: 'not-allowed', opacity: 0.7 }}
             >
                 Apply Now
             </button>

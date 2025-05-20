@@ -59,8 +59,8 @@ const Signup = () => {
         e.preventDefault();
         try {
             // Register user
-            const registerUrl = `${process.env.REACT_APP_API_URL}/api/users`;
-            await axios.post(registerUrl, {
+            const apiUrl = process.env.REACT_APP_API_URL;
+            await axios.post(`${apiUrl}/api/users`, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
@@ -68,8 +68,7 @@ const Signup = () => {
             });
 
             // Login to get token
-            const loginUrl = `${process.env.REACT_APP_API_URL}/api/auth`;
-            const { data: loginRes } = await axios.post(loginUrl, {
+            const { data: loginRes } = await axios.post(`${apiUrl}/api/auth`, {
                 email: data.email,
                 password: data.password
             });
@@ -80,9 +79,8 @@ const Signup = () => {
 
             // Update profile with additional info
             if (data.location || data.yearsOfExperience || data.skills.length > 0) {
-                const profileUrl = `${process.env.REACT_APP_API_URL}/api/users/profile`;
                 await axios.post(
-                    profileUrl,
+                    `${apiUrl}/api/users/profile`,
                     {
                         location: data.location,
                         yearsOfExperience: data.yearsOfExperience,

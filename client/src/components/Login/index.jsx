@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
+import config from "../../config";
 
 const Login = () => {
 	const [data, setData] = useState({ email: "", password: "" });
@@ -14,11 +15,13 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const url = `${process.env.REACT_APP_API_URL}/api/auth`;
-			const { data: res } = await axios.post(url, data);
+			const { data: res } = await axios.post(
+				`${config.apiUrl}/api/auth`,
+				data
+			);
 			localStorage.setItem("token", res.data);
 			localStorage.setItem("isAdmin", res.isAdmin);
-			window.location = "/";
+			window.location.href = "/";
 		} catch (error) {
 			if (
 				error.response &&

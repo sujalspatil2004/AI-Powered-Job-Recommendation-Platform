@@ -184,6 +184,19 @@
 	background-color: var(--primary-hover);
 }
 
+/* Add responsive styles for Signup component */
+.signup-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+@media (max-width: 768px) {
+    .signup-form {
+        padding: 8px;
+    }
+}
+
 @media (max-width: 900px) {
 	.signup_form_container {
 		width: 100%;

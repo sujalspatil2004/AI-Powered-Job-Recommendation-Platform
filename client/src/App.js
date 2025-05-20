@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Main from "./components/Main";
 import Signup from "./components/Singup";
@@ -7,6 +7,7 @@ import "./styles/theme.css";
 
 function App() {
 	const user = localStorage.getItem("token");
+	const navigate = useNavigate();
 
 	return (
 		<ThemeProvider>

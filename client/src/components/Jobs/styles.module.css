@@ -181,15 +181,33 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, opacity 0.2s;
     margin-top: auto;
 }
 
-.apply_btn:hover {
+.apply_btn:disabled {
+    background: var(--primary-color);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.apply_btn:not(:disabled):hover {
     background: var(--primary-hover);
 }
 
+/* Add responsive styles for Jobs component */
+.jobs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
 @media (max-width: 768px) {
+    .jobs-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
     .container {
         padding: 15px;
     }

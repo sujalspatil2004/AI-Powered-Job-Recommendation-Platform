@@ -92,3 +92,17 @@
 	box-sizing: border-box;
 	background-color: var(--background-color);
 }
+
+/* Add responsive styles for Main component */
+.main-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 8px;
+    }
+}

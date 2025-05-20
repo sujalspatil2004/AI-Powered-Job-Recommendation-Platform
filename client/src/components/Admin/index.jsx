@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
+import config from "../../config";
 
 const Admin = () => {
     const [jobData, setJobData] = useState({
@@ -28,7 +29,7 @@ const Admin = () => {
     const fetchJobs = async () => {
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/jobs`, {
+            const { data } = await axios.get(`${config.apiUrl}/api/jobs`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setJobs(data);
@@ -40,7 +41,7 @@ const Admin = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
+            const { data } = await axios.get(`${config.apiUrl}/api/users`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setUsers(data);
@@ -75,13 +76,13 @@ const Admin = () => {
 
             if (editingJob) {
                 await axios.put(
-                    `${process.env.REACT_APP_API_URL}/api/jobs/${editingJob._id}`,
+                    `${config.apiUrl}/api/jobs/${editingJob._id}`,
                     jobData,
                     config
                 );
                 setSuccess("Job updated successfully");
             } else {
-                await axios.post(`${process.env.REACT_APP_API_URL}/api/jobs`, jobData, config);
+                await axios.post(`${config.apiUrl}/api/jobs`, jobData, config);
                 setSuccess("Job created successfully");
             }
 
@@ -111,7 +112,7 @@ const Admin = () => {
 
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`${process.env.REACT_APP_API_URL}/api/jobs/${jobId}`, {
+            await axios.delete(`${config.apiUrl}/api/jobs/${jobId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             fetchJobs();
@@ -124,7 +125,7 @@ const Admin = () => {
     const handleUserClick = async (userId) => {
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${userId}`, {
+            const { data } = await axios.get(`${config.apiUrl}/api/users/${userId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setSelectedUser(data);
@@ -136,7 +137,7 @@ const Admin = () => {
     const handleMakeAdmin = async (userId) => {
         try {
             const token = localStorage.getItem("token");
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/users/make-admin/${userId}`, {}, {
+            await axios.post(`${config.apiUrl}/api/users/make-admin/${userId}`, {}, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             fetchUsers();
@@ -151,7 +152,7 @@ const Admin = () => {
 
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/${userId}`, {
+            await axios.delete(`${config.apiUrl}/api/users/${userId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             fetchUsers();

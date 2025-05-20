@@ -8,13 +8,12 @@
 }
 
 .login_form_container {
-	width: 900px;
-	height: 500px;
-	display: flex;
+	width: 100%;
+	max-width: 400px;
+	padding: 20px;
+	background-color: var(--surface-color);
 	border-radius: 10px;
-	box-shadow: 0px 3px 3px -2px var(--shadow-color),
-		0px 3px 4px 0px var(--shadow-color),
-		0px 1px 8px 0px var(--shadow-color);
+	box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .left {
@@ -41,15 +40,13 @@
 }
 
 .input {
-	outline: none;
-	border: none;
-	width: 370px;
-	padding: 15px;
-	border-radius: 10px;
-	background-color: var(--background-color);
-	margin: 5px 0;
-	font-size: 14px;
-	color: var(--text-color);
+	width: 100%;
+	padding: 12px;
+	margin-bottom: 16px;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	font-size: 16px;
+	box-sizing: border-box;
 }
 
 .error_msg {
@@ -108,4 +105,79 @@
 
 .green_btn:hover {
 	background-color: var(--primary-hover);
+}
+
+/* Enhance responsiveness for the Login component */
+.login_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: var(--background-color);
+}
+
+.login_form_container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: var(--surface-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Media queries for smaller devices */
+@media (max-width: 768px) {
+    .login_form_container {
+        padding: 16px;
+    }
+
+    .input {
+        font-size: 14px;
+    }
+
+    .button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login_form_container {
+        padding: 12px;
+    }
+
+    .input {
+        font-size: 12px;
+    }
+
+    .button {
+        font-size: 12px;
+    }
 }
