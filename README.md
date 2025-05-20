@@ -2,137 +2,262 @@
 
 A modern job board application built with the MERN stack (MongoDB, Express.js, React.js, Node.js) featuring AI-powered job matching.
 
-## Key Features
+## Quick Setup
 
-- **AI-Powered Job Matching**: Uses OpenAI's GPT API to analyze user profiles and job requirements for intelligent recommendations
-- **Responsive Design**: Mobile-first approach ensuring seamless experience across all devices
-- **Profile Management**: Rich user profiles with skills, experience, and job preferences
-- **Admin Dashboard**: Comprehensive admin controls including user management and job posting
-- **Smart Job Search**: Advanced filtering and search capabilities
+1. **Clone and Configure**
+    ```bash
+    # Clone the repository
+    git clone https://github.com/yourusername/ai-powered-job-match-platform.git
+    cd ai-powered-job-match-platform
 
-## AI Job Matching System
+    # Create environment files
+    cp server/.env.example server/.env
+    cp client/.env.example client/.env
+    ```
 
-The application uses OpenAI's GPT API to provide intelligent job recommendations:
+2. **Environment Setup**
+    ```env
+    # Server (.env)
+    DB=mongodb://localhost:27017/jobboard
+    JWTPRIVATEKEY=your_jwt_key
+    SALT=10
+    OPENAI_API_KEY=your_openai_api_key
+    ALLOWED_ORIGINS=http://localhost:3000
 
-1. **Profile Analysis**:
-   - User profiles are analyzed based on:
-     - Skills (technical skills, soft skills)
-     - Years of experience
-     - Location preferences
-     - Job type preferences (remote/onsite/hybrid)
+    # Client (.env)
+    REACT_APP_API_URL=http://localhost:8080
+    ```
 
-2. **Job Matching Process**:
-   - The system sends a carefully crafted prompt to OpenAI containing:
-     - User's complete profile information
-     - Available job listings with requirements
-   - GPT analyzes the data considering:
-     - Skills overlap
-     - Experience level match
-     - Location compatibility
-     - Work type preferences
-   - Returns top 3 most suitable job matches
+3. **Install Dependencies**
+    ```bash
+    # Server setup
+    cd server
+    npm install
 
-3. **Recommendation Delivery**:
-   - Matches are processed and ranked
-   - Only high-confidence matches are shown
-   - Users can see why each job was recommended
+    # Client setup
+    cd ../client
+    npm install
+    ```
 
-## Getting Started
+4. **Initialize Database**
+    ```bash
+    # Create admin user
+    cd server
+    node initAdmin.js
 
-1. Clone the repository
-2. Set up environment variables:
+    # Seed sample jobs (optional)
+    node seedJobs.js
+    ```
 
-```env
-# Server (.env)
-DB=mongodb://localhost:27017/jobboard
-JWTPRIVATEKEY=your_jwt_key
-SALT=10
-OPENAI_API_KEY=your_openai_api_key
+5. **Start Development Servers**
+    ```bash
+    # Start server (from server directory)
+    npm start
+
+    # Start client (in another terminal, from client directory)
+    npm start
+    ```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+
+## AI Integration and Prompt Design
+
+### OpenAI GPT Integration
+
+The application leverages OpenAI's GPT API for intelligent job matching through carefully designed prompts and context management:
+
+1. **Profile Analysis Prompt Structure**
+    ```javascript
+    The system analyzes user profiles with this context structure:
+    {
+      skills: string[],          // Technical and soft skills
+      yearsOfExperience: number, // Total years of experience
+      location: string,          // Preferred location
+      preferredJobType: string   // "remote", "onsite", or "hybrid"
+    }
+    ```
+
+2. **Job Matching Prompt Design**
+    ```javascript
+    The system constructs prompts with:
+    - User profile data
+    - Available job listings
+    - Specific matching criteria
+    - Required output format
+    ```
+
+3. **Response Processing**
+    - Confidence scoring (0-100%)
+    - Match reasoning generation
+    - Top 3 recommendations selection
+
+### AI Configuration Best Practices
+
+1. **Rate Limiting**
+   - Maximum 10 requests per minute per user
+   - Cached recommendations for 24 hours
+
+2. **Error Handling**
+   - Fallback to conventional matching if AI service is unavailable
+   - Graceful degradation of features
+
+3. **Prompt Engineering Guidelines**
+   - Use consistent formatting
+   - Include explicit instructions
+   - Maintain context window limits
+
+## API Documentation
+
+### Authentication Endpoints
+
+#### POST /api/auth
+Login endpoint that returns a JWT token.
+```json
+Request:
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+Response:
+{
+  "data": "jwt_token_here",
+  "isAdmin": false,
+  "message": "logged in successfully"
+}
 ```
 
-3. Install dependencies:
-```bash
-# Install server dependencies
-cd server
-npm install
+### User Endpoints
 
-# Install client dependencies
-cd ../client
-npm install
+#### POST /api/users
+Register a new user.
+```json
+Request:
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+Response:
+{
+  "message": "User created successfully"
+}
 ```
 
-4. Start the application:
-```bash
-# Start server (from server directory)
-npm start
+#### GET /api/users/profile
+Get authenticated user's profile (requires auth token).
 
-# Start client (from client directory)
-npm start
+#### POST /api/users/profile
+Update user profile (requires auth token).
+```json
+Request:
+{
+  "location": "New York, NY",
+  "yearsOfExperience": 5,
+  "skills": ["JavaScript", "React", "Node.js"],
+  "preferredJobType": "remote"
+}
 ```
 
-## Technical Architecture
+### Job Endpoints
 
-### Frontend
-- React.js with modular components
-- CSS Modules for styled components
-- Responsive design using modern CSS features
-- Protected routes with JWT authentication
+#### GET /api/jobs
+Get all jobs (requires auth token).
 
-### Backend
+#### GET /api/jobs/recommendations/me
+Get AI-powered job recommendations (requires auth token).
+
+#### POST /api/jobs (Admin only)
+Create a new job listing.
+```json
+Request:
+{
+  "title": "Senior Developer",
+  "company": "Tech Corp",
+  "location": "San Francisco, CA",
+  "type": "remote",
+  "skills": ["JavaScript", "React", "Node.js"],
+  "description": "We are looking for..."
+}
+```
+
+#### PUT /api/jobs/:id (Admin only)
+Update an existing job.
+
+#### DELETE /api/jobs/:id (Admin only)
+Delete a job listing.
+
+## Code Architecture
+
+### Project Structure
+
+```
+client/                 # React frontend
+├── src/
+│   ├── components/    # React components
+│   ├── contexts/      # React contexts
+│   └── styles/        # CSS modules
+│
+server/                # Node.js backend
+├── middleware/        # Express middlewares
+├── models/           # Mongoose models
+├── routes/           # API routes
+└── services/         # Business logic
+```
+
+### Key Technologies
+
+#### Frontend
+- React 17+ with Hooks
+- React Router v6
+- CSS Modules
+- JWT Authentication
+- Context API for state management
+
+#### Backend
 - Node.js with Express
-- MongoDB for data persistence
-- OpenAI GPT API integration
+- MongoDB with Mongoose
 - JWT for authentication
+- OpenAI GPT API
+- Input validation with Joi
 
-### API Endpoints
+### Security Measures
 
-#### Jobs
-- `GET /api/jobs` - Get all jobs
-- `GET /api/jobs/recommendations/me` - Get AI-powered job recommendations
-- `POST /api/jobs` (Admin) - Create new job
-- `PUT /api/jobs/:id` (Admin) - Update job
-- `DELETE /api/jobs/:id` (Admin) - Delete job
+1. **Authentication**
+   - JWT-based auth flow
+   - Token expiration
+   - Secure password hashing
+   - CORS protection
 
-#### Users
-- `POST /api/users` - Register new user
-- `GET /api/users/profile` - Get user profile
-- `POST /api/users/profile` - Update user profile
-- `GET /api/users` (Admin) - Get all users
-- `GET /api/users/:id` (Admin) - Get specific user
+2. **Authorization**
+   - Role-based access control
+   - Protected admin routes
+   - Resource ownership validation
 
-#### Authentication
-- `POST /api/auth` - User login
-- `GET /api/auth/verify` - Verify JWT token
+3. **Data Protection**
+   - Input sanitization
+   - Request rate limiting
+   - Environment variable encryption
 
-## Admin Features
+### Deployment Architecture
 
-Administrators have access to:
-- Complete user profile management
-- Job posting and management
-- User activity monitoring
-- System analytics
+```
+Client (Netlify) → API (Railway) → MongoDB Atlas
+                                → OpenAI API
+```
 
-## Security
+## Contributing
 
-- JWT-based authentication
-- Password hashing with bcrypt
-- Protected admin routes
-- Input validation and sanitization
-- Environment variable protection
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Responsive Design
+## License
 
-The application follows a mobile-first approach with:
-- Fluid layouts using CSS Grid and Flexbox
-- Responsive typography
-- Optimized images
-- Touch-friendly interfaces
-- Breakpoints for all device sizes
-
-## Future Enhancements
-
-- Enhanced AI matching with more parameters
-- Real-time notifications
-- Interview scheduling
-- Application tracking
-- Analytics dashboard
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
