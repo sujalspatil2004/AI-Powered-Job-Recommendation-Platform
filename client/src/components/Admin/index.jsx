@@ -29,11 +29,24 @@ const Admin = () => {
     const fetchJobs = async () => {
         try {
             const token = localStorage.getItem("token");
+            if (!token) {
+                setError("Please log in to continue");
+                window.location.href = "/login";
+                return;
+            }
+
             const { data } = await axios.get(`${config.apiUrl}/api/jobs`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             setJobs(data);
+            setError("");
         } catch (error) {
+            console.error("Error fetching jobs:", error);
+            if (error.response?.status === 401) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("isAdmin");
+                window.location.href = "/login";
+            }
             setError("Failed to fetch jobs");
         }
     };
@@ -55,10 +68,15 @@ const Admin = () => {
     };
 
     const addSkill = () => {
-        if (skillInput && !jobData.skills.includes(skillInput)) {
-            setJobData({ ...jobData, skills: [...jobData.skills, skillInput] });
-            setSkillInput("");
+        if (!skillInput.trim()) {
+            setError("Please enter a skill");
+            return;
         }
+        if (!jobData.skills.includes(skillInput.trim())) {
+            setJobData({ ...jobData, skills: [...jobData.skills, skillInput.trim()] });
+        }
+        setSkillInput("");
+        setError("");
     };
 
     const removeSkill = (skillToRemove) => {
@@ -70,22 +88,44 @@ const Admin = () => {
 
     const handleJobSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setSuccess("");
+        
+        if (!jobData.title || !jobData.company || !jobData.location || !jobData.description) {
+            setError("Please fill in all required fields");
+            return;
+        }
+
+        if (jobData.skills.length === 0) {
+            setError("Please add at least one required skill");
+            return;
+        }
+
         try {
             const token = localStorage.getItem("token");
-            const config = { headers: { "Authorization": `Bearer ${token}` } };
+            const headers = { "Authorization": `Bearer ${token}` };
 
             if (editingJob) {
-                await axios.put(
+                const response = await axios.put(
                     `${config.apiUrl}/api/jobs/${editingJob._id}`,
                     jobData,
-                    config
+                    { headers }
                 );
-                setSuccess("Job updated successfully");
+                if (response.data) {
+                    setSuccess("Job updated successfully");
+                }
             } else {
-                await axios.post(`${config.apiUrl}/api/jobs`, jobData, config);
-                setSuccess("Job created successfully");
+                const response = await axios.post(
+                    `${config.apiUrl}/api/jobs`,
+                    jobData,
+                    { headers }
+                );
+                if (response.data) {
+                    setSuccess("Job created successfully");
+                }
             }
 
+            // Reset form
             setJobData({
                 title: "",
                 company: "",
@@ -94,10 +134,21 @@ const Admin = () => {
                 skills: [],
                 description: ""
             });
+            setSkillInput("");
             setEditingJob(null);
-            fetchJobs();
+            await fetchJobs();
         } catch (error) {
-            setError(error.response?.data?.message || "Failed to save job");
+            console.error("Job save error:", error);
+            if (error.response?.status === 401) {
+                setError("Your session has expired. Please log in again.");
+                localStorage.removeItem("token");
+                localStorage.removeItem("isAdmin");
+                window.location.href = "/login";
+            } else if (error.response?.status === 403) {
+                setError("You don't have permission to perform this action");
+            } else {
+                setError(error.response?.data?.message || "Failed to save job");
+            }
         }
     };
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
+import config from "../../config";
 
 const Signup = () => {
     const [data, setData] = useState({
@@ -59,8 +60,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             // Register user
-            const apiUrl = process.env.REACT_APP_API_URL;
-            await axios.post(`${apiUrl}/api/users`, {
+            await axios.post(`${config.apiUrl}/api/users`, {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
@@ -68,7 +68,7 @@ const Signup = () => {
             });
 
             // Login to get token
-            const { data: loginRes } = await axios.post(`${apiUrl}/api/auth`, {
+            const { data: loginRes } = await axios.post(`${config.apiUrl}/api/auth`, {
                 email: data.email,
                 password: data.password
             });
@@ -80,7 +80,7 @@ const Signup = () => {
             // Update profile with additional info
             if (data.location || data.yearsOfExperience || data.skills.length > 0) {
                 await axios.post(
-                    `${apiUrl}/api/users/profile`,
+                    `${config.apiUrl}/api/users/profile`,
                     {
                         location: data.location,
                         yearsOfExperience: data.yearsOfExperience,
