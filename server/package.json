@@ -4,13 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --no-deprecation index.js",
-    "dev": "nodemon index.js",
-    "build": "echo 'Build step completed'"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "engines": {
-    "node": ">=18.x",
-    "npm": ">=9.x"
+    "node": ">=18.x"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -20,8 +18,7 @@
     "joi": "^17.11.0",
     "joi-password-complexity": "^5.2.0",
     "jsonwebtoken": "^9.0.2",
-    "jwt-decode": "^4.0.0",
-    "mongoose": "^7.6.8",
+    "mongoose": "6.13.8",
     "openai": "^4.20.1"
   },
   "devDependencies": {
