@@ -4,3 +4,5 @@ nixpacks.nodejs_version = "18"
 [deploy]
 startCommand = "npm start"
 restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
