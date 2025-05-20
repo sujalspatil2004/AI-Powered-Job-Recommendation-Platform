@@ -14,4 +14,4 @@ type = "web"
 [env]
 PORT = "8080"
 NODE_ENV = "production"
-CLIENT_URL = "https://ai-powered-job-match.netlify.app"
+ALLOWED_ORIGINS = "https://ai-powered-job-match.netlify.app,https://ai-powered-job-match-platform.vercel.app"

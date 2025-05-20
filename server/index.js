@@ -10,10 +10,27 @@ const jobRoutes = require("./routes/jobs");
 // database connection
 connection();
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : [
+        'https://ai-powered-job-match.netlify.app',
+        'https://ai-powered-job-match-platform.vercel.app',
+        'http://localhost:3000'
+    ];
+
 // middlewares
 app.use(express.json());
 app.use(cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: function(origin, callback) {
+        // allow requests with no origin (like mobile apps, curl requests)
+        if(!origin) return callback(null, true);
+        
+        if(allowedOrigins.indexOf(origin) === -1){
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
