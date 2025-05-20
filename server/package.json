@@ -9,25 +9,25 @@
     "dev": "nodemon index.js"
   },
   "engines": {
-    "node": "18.x",
-    "npm": "9.x"
+    "node": ">=18.x",
+    "npm": ">=9.x"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "5.1.0",
-    "cors": "2.8.5",
-    "dotenv": "16.0.3",
-    "express": "4.18.2",
-    "joi": "17.9.2",
-    "joi-password-complexity": "5.1.0",
-    "jsonwebtoken": "9.0.0",
-    "jwt-decode": "3.1.2",
-    "mongoose": "7.1.1",
-    "openai": "4.10.0"
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "joi": "^17.11.0",
+    "joi-password-complexity": "^5.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "mongoose": "^6.12.3",
+    "openai": "^4.20.1"
   },
   "devDependencies": {
-    "nodemon": "2.0.22"
+    "nodemon": "^3.0.1"
   }
 }
