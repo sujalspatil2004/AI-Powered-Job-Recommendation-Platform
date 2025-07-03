@@ -250,6 +250,34 @@ Client (Netlify) → API (Railway) → MongoDB Atlas
                                 → OpenAI API
 ```
 
+## Testing
+
+### Backend
+- Uses Jest and Supertest
+- Tests in `server/tests/`
+- Run tests:
+  ```sh
+  cd server
+  npx jest
+  ```
+
+### Frontend
+- Uses Jest and React Testing Library
+- Tests in `client/src/components/*/*.test.js`
+- Run tests:
+  ```sh
+  cd client
+  npx jest
+  ```
+
+### CI/CD
+- All tests, lint, build, and coverage run automatically on push/pull via GitHub Actions (`.github/workflows/ci.yml`)
+
+## Example Test Cases
+- `/api/jobs` endpoint: returns jobs, handles empty and error cases
+- Authentication: login, register, error handling
+- Frontend: Login form renders, user flows
+
 ## Contributing
 
 1. Fork the repository
