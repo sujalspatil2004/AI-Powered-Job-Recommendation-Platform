@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
 import config from "../../config";
@@ -21,21 +21,7 @@ const Admin = () => {
     const [editingJob, setEditingJob] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
 
-    useEffect(() => {
-        const isAdmin = localStorage.getItem("isAdmin");
-        const token = localStorage.getItem("token");
-        
-        if (!token || isAdmin !== "true") {
-            setError("Access denied. Admin rights required.");
-            window.location.href = "/login";
-            return;
-        }
-
-        fetchJobs();
-        fetchUsers();
-    }, []);
-
-    const fetchJobs = async () => {
+    const fetchJobs = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -45,30 +31,65 @@ const Admin = () => {
             }
 
             const { data } = await axios.get(`${config.apiUrl}/api/jobs`, {
-                headers: { "Authorization": `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setJobs(data);
             setError("");
         } catch (error) {
             console.error("Error fetching jobs:", error);
-            if (error.response?.status === 401) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("isAdmin");
-                window.location.href = "/login";
-            }
+            handleAuthError(error);
             setError("Failed to fetch jobs");
         }
-    };
+    }, []);
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
+            if (!token) {
+                setError("Please log in to continue");
+                window.location.href = "/login";
+                return;
+            }
+
             const { data } = await axios.get(`${config.apiUrl}/api/users`, {
-                headers: { "Authorization": `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setUsers(data);
+            setError("");
         } catch (error) {
+            console.error("Error fetching users:", error);
+            handleAuthError(error);
             setError("Failed to fetch users");
+        }
+    }, []);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const isAdmin = localStorage.getItem("isAdmin");
+
+        if (!token) {
+            setError("Access denied. Please log in.");
+            window.location.href = "/login";
+            return;
+        }
+
+        if (isAdmin !== "true") {
+            setError("Access denied. Admin rights required.");
+            window.location.href = "/login";
+            return;
+        }
+
+        fetchJobs();
+        fetchUsers();
+    }, [fetchJobs, fetchUsers]);
+
+    const handleAuthError = (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("isAdmin");
+            window.location.href = "/login";
+        } else if (error.response?.status === 403) {
+            setError("You don't have permission to perform this action");
         }
     };
 
