@@ -22,6 +22,15 @@ const Admin = () => {
     const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
+        const isAdmin = localStorage.getItem("isAdmin");
+        const token = localStorage.getItem("token");
+        
+        if (!token || isAdmin !== "true") {
+            setError("Access denied. Admin rights required.");
+            window.location.href = "/login";
+            return;
+        }
+
         fetchJobs();
         fetchUsers();
     }, []);
