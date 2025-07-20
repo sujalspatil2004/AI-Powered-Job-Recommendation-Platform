@@ -103,7 +103,7 @@ const Jobs = () => {
                 disabled={true}
                 style={{ cursor: 'not-allowed', opacity: 0.7 }}
             >
-                Apply Now
+                Apply Now contact Admin 
             </button>
         </div>
     );

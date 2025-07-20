@@ -62,6 +62,14 @@ The application will be available at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8080
 
+### Default Admin Credentials
+After running initAdmin.js, you can log in with these default admin credentials:
+```
+Email: admin@jobmatch.com
+Password: Admin@123
+```
+⚠️ For security reasons, please change these credentials after your first login.
+
 ## AI Integration and Prompt Design
 
 ### OpenAI GPT Integration
