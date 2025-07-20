@@ -1,9 +1,9 @@
 # Frontend Dockerfile (multi-stage)
 FROM node:18 as build
 WORKDIR /app
-COPY client/package*.json ./
+COPY package*.json ./
 RUN npm install --legacy-peer-deps
-COPY client/ ./
+COPY . ./
 RUN npm run build
 
 FROM nginx:alpine
