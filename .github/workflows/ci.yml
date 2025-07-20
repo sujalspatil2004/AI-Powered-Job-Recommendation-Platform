@@ -22,7 +22,16 @@ jobs:
         run: |
           cd server
           npm install --legacy-peer-deps
+      - name: Set up MongoDB for tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mongodb
+          sudo service mongodb start
+          mongo --eval "db.getSiblingDB('test').createCollection('jobs')"
+          mongo --eval "db.getSiblingDB('test').createCollection('users')"
       - name: Run backend tests
+        env:
+          DB: mongodb://localhost:27017/test
         run: |
           cd server
           npx jest --passWithNoTests
