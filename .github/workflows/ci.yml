@@ -25,7 +25,7 @@ jobs:
       - name: Lint backend
         run: |
           cd server
-          npx eslint .
+          npm run lint
       - name: Set up MongoDB for tests
         run: |
           sudo apt-get update
@@ -36,7 +36,7 @@ jobs:
           DB: mongodb://localhost:27017/test
         run: |
           cd server
-          npx jest
+          npm run test
       - name: Install frontend dependencies
         run: |
           cd client
@@ -44,11 +44,11 @@ jobs:
       - name: Lint frontend
         run: |
           cd client
-          npx eslint .
+          npm run lint
       - name: Run frontend tests
         run: |
           cd client
-          npx jest
+          npm run test
 
   build-and-push:
     runs-on: ubuntu-latest
