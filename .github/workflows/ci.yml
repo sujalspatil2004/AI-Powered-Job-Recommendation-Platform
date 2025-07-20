@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install backend dependencies
+        run: |
+          cd server
+          npm install --legacy-peer-deps
+      - name: Set up MongoDB for tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mongodb
+          sudo service mongodb start
+          mongo --eval "db.getSiblingDB('test').createCollection('jobs')"
+          mongo --eval "db.getSiblingDB('test').createCollection('users')"
+      - name: Run backend tests
+        env:
+          DB: mongodb://localhost:27017/test
+        run: |
+          cd server
+          npx jest --passWithNoTests
+      - name: Install frontend dependencies
+        run: |
+          cd client
+          npm install --legacy-peer-deps
+      - name: Run frontend tests
+        run: |
+          cd client
+          npx jest --passWithNoTests
+      - name: Lint backend
+        run: |
+          cd server
+          npx eslint . || true
+      - name: Lint frontend
+        run: |
+          cd client
+          npx eslint . || true
+      - name: Build frontend
+        run: |
+          cd client
+          npm run build || true
+      - name: Code Coverage Report (Backend)
+        run: |
+          cd server
+          npx jest --coverage --passWithNoTests
+      - name: Code Coverage Report (Frontend)
+        run: |
+          cd client
+          npx jest --coverage --passWithNoTests
+      - name: Deploy Backend to Railway
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          railway up --service=backend --ci
+      - name: Deploy Frontend to Netlify
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ./client/build
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Automated production deploy from CI/CD"
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
