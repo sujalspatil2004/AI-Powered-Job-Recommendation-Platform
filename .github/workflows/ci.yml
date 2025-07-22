@@ -80,14 +80,4 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/job-match-frontend:latest
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [test, build-and-push]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy backend to Render
-        run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK }}
-
-      - name: Deploy frontend to Render
-        run: curl -X POST ${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}
 
