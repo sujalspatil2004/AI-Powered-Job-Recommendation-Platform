@@ -33,7 +33,8 @@ app.use(cors({
     },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    credentials: true,
+    preflightContinue: true // Added to ensure preflight requests are handled
 }));
 
 // API documentation route
