@@ -34,6 +34,7 @@ jobs:
       - name: Run backend tests
         env:
           DB: mongodb://localhost:27017/test
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           cd server
           npm run test
