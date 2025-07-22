@@ -10,6 +10,7 @@ describe('Login Component', () => {
         <Login />
       </MemoryRouter>
     );
-    expect(screen.getByText(/login/i)).toBeInTheDocument();
+    expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });
 });
