@@ -4,7 +4,11 @@ import Login from '../Login/index.jsx';
 
 describe('Login Component', () => {
   it('renders login form', () => {
-    render(<Login />);
+    render(
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    );
     expect(screen.getByText(/login/i)).toBeInTheDocument();
   });
 });
