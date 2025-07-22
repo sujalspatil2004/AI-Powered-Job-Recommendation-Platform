@@ -1,5 +1,4 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
 const { Job } = require("./models/job");
 const connection = require("./db");
 

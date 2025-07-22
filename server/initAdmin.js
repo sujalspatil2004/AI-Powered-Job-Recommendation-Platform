@@ -1,5 +1,4 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
 const { User } = require("./models/user");
 const bcrypt = require("bcrypt");
 const connection = require("./db");
@@ -33,7 +32,7 @@ const createAdmin = async () => {
         const hashPassword = await bcrypt.hash(adminUser.password, salt);
         
         // Create admin user
-        const admin = await new User({
+        await new User({
             ...adminUser,
             password: hashPassword
         }).save();
