@@ -15,6 +15,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     : [
         'https://ai-powered-job-match.netlify.app',
         'https://ai-powered-job-match-platform.vercel.app',
+        'https://ai-powered-job-match-platform-53irrh3z0.vercel.app',
         'http://localhost:3000'
     ];
 
