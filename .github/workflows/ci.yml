@@ -27,7 +27,7 @@ jobs:
           cd server
           npm run lint
       - name: Set up MongoDB for tests
-        uses: mongodb-actions/setup-mongodb@v2
+        uses: mongodb-labs/setup-mongodb@v2
         with:
           mongodb-version: '6.0'
           mongodb-port: 27017
