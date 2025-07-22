@@ -27,7 +27,7 @@ jobs:
           cd server
           npm run lint
       - name: Set up MongoDB for tests
-        uses: mongodb-actions/setup-mongodb@v1
+        uses: supercharge/mongodb-github-action@1.10.0
         with:
           mongodb-version: '6.0'
           mongodb-port: 27017
