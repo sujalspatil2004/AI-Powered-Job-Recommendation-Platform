@@ -96,15 +96,40 @@ const Jobs = () => {
             <div className={styles.job_description}>
                 <h4>Description:</h4>
                 <p>{job.description}</p>
+                {job.link && (
+                    <div style={{ marginTop: '8px' }}>
+                        <a
+                            href={job.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.apply_btn}
+                            style={{ display: 'inline-block', textAlign: 'center' }}
+                        >
+                            View Job Posting
+                        </a>
+                    </div>
+                )}
             </div>
 
-            <button 
-                className={styles.apply_btn}
-                disabled={true}
-                style={{ cursor: 'not-allowed', opacity: 0.7 }}
-            >
-                Apply Now contact Admin 
-            </button>
+            {job.link ? (
+                <a
+                    href={job.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.apply_btn}
+                    style={{ textAlign: 'center', display: 'block', marginTop: '8px' }}
+                >
+                    Apply Now
+                </a>
+            ) : (
+                <button 
+                    className={styles.apply_btn}
+                    disabled={true}
+                    style={{ cursor: 'allowed', opacity: 0.7 }}
+                >
+                    Apply Now contact Admin 
+                </button>
+            )}
         </div>
     );
 
