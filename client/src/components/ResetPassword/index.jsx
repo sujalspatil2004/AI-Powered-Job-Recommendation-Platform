@@ -1,96 +1,65 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./styles.module.css";
 import config from "../../config";
+import styles from "./styles.module.css"; // ✅ Make sure this file exists and has your provided CSS
 
 const ResetPassword = () => {
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
-    
-    // Get token from URL query params
-    const location = useLocation();
-    const token = new URLSearchParams(location.search).get('token');
+  const [searchParams] = useSearchParams();
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
+  const token = searchParams.get("token");
 
-        try {
-            const { data } = await axios.post(
-                `${config.apiUrl}/api/auth/reset-password`,
-                { token, password }
-            );
-            setSuccess(data.message);
-            setError("");
-        } catch (error) {
-            setError(error.response?.data?.message || "An error occurred");
-            setSuccess("");
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
 
-    if (!token) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.form_container}>
-                    <h1>Invalid Reset Link</h1>
-                    <p>The password reset link is invalid or has expired.</p>
-                    <Link to="/forgot-password" className={styles.link}>
-                        Request a new password reset
-                    </Link>
-                </div>
-            </div>
-        );
+    try {
+      const res = await axios.post(`${config.apiUrl}/api/auth/reset-password`, {
+        token,
+        password,
+      });
+
+      setIsError(false);
+      setMessage(res.data.message);
+      setTimeout(() => navigate("/login"), 3000); // Redirect after success
+    } catch (err) {
+      setIsError(true);
+      setMessage(err.response?.data?.message || "Error resetting password");
     }
+  };
 
-    return (
-        <div className={styles.container}>
-            <div className={styles.form_container}>
-                <h1>Reset Password</h1>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="password"
-                        placeholder="New Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className={styles.input}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Confirm New Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        className={styles.input}
-                    />
-                    {error && <div className={styles.error_msg}>{error}</div>}
-                    {success && (
-                        <div className={styles.success_msg}>
-                            {success}
-                            <Link to="/login" className={styles.link}>
-                                Return to Login
-                            </Link>
-                        </div>
-                    )}
-                    <button type="submit" className={styles.submit_btn}>
-                        Reset Password
-                    </button>
-                </form>
-                {!success && (
-                    <Link to="/login" className={styles.link}>
-                        Back to Login
-                    </Link>
-                )}
-            </div>
-        </div>
-    );
+  if (!token) return <p className={styles.error_msg}>Invalid or missing reset token</p>;
+
+  return (
+    <div className={styles.container}>
+      <form className={styles.form_container} onSubmit={handleSubmit}>
+        <h1>Reset Password</h1>
+
+        {message && (
+          <div className={isError ? styles.error_msg : styles.success_msg}>
+            {message}
+          </div>
+        )}
+
+        <input
+          type="password"
+          placeholder="Enter new password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
+        />
+
+        <button type="submit" className={styles.submit_btn}>
+          Reset Password
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default ResetPassword;

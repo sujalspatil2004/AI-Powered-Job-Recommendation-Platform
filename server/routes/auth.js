@@ -3,7 +3,9 @@ const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
+// Login route
 router.post("/", async (req, res) => {
     try {
         const { error } = validate(req.body);
@@ -22,10 +24,10 @@ router.post("/", async (req, res) => {
             return res.status(401).send({ message: "Invalid Email or Password" });
 
         const token = user.generateAuthToken();
-        res.status(200).send({ 
-            data: token, 
+        res.status(200).send({
+            data: token,
             isAdmin: user.isAdmin,
-            message: "logged in successfully" 
+            message: "logged in successfully"
         });
     } catch (error) {
         res.status(500).send({ message: "Internal Server Error" });
@@ -40,19 +42,39 @@ router.post("/forgot-password", async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
 
-        // Generate reset token
-        const token = crypto.randomBytes(20).toString('hex');
-        
-        // Save token and expiration
+        const token = crypto.randomBytes(20).toString("hex");
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        res.status(200).send({ 
-            message: "Password reset token generated successfully",
-            resetToken: token 
+        const resetUrl = `http://localhost:3000/reset-password?token=${token}`;
+
+        // Setup Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
         });
+
+        const mailOptions = {
+            from: `"Support" <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: "Password Reset",
+            html: `
+                <h2>Password Reset Request</h2>
+                <p>Click the link below to reset your password:</p>
+                <a href="${resetUrl}">${resetUrl}</a>
+                <p>This link will expire in 1 hour.</p>
+            `,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).send({ message: "Reset link sent to your email address" });
     } catch (error) {
+        console.error("Forgot-password error:", error);
         res.status(500).send({ message: "Internal Server Error" });
     }
 });
@@ -66,16 +88,14 @@ router.post("/reset-password", async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).send({ message: "Password reset token is invalid or has expired" });
+            return res.status(400).send({ message: "Token is invalid or expired" });
         }
 
-        // Validate new password
         const { error } = validatePassword(req.body);
         if (error) {
             return res.status(400).send({ message: error.details[0].message });
         }
 
-        // Hash new password and save
         const salt = await bcrypt.genSalt(Number(process.env.SALT));
         user.password = await bcrypt.hash(req.body.password, salt);
         user.resetPasswordToken = undefined;
@@ -84,10 +104,12 @@ router.post("/reset-password", async (req, res) => {
 
         res.status(200).send({ message: "Password reset successful" });
     } catch (error) {
+        console.error("Reset-password error:", error);
         res.status(500).send({ message: "Internal Server Error" });
     }
 });
 
+// Validation
 const validate = (data) => {
     const schema = Joi.object({
         email: Joi.string().email().required().label("Email"),
@@ -99,7 +121,7 @@ const validate = (data) => {
 const validatePassword = (data) => {
     const schema = Joi.object({
         token: Joi.string().required().label("Reset Token"),
-        password: Joi.string().required().label("Password")
+        password: Joi.string().required().label("Password"),
     });
     return schema.validate(data);
 };
