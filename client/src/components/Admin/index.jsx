@@ -10,7 +10,8 @@ const Admin = () => {
         location: "",
         type: "remote",
         skills: [],
-        description: ""
+        description: "",
+        link: ""
     });
     const [jobs, setJobs] = useState([]);
     const [users, setUsers] = useState([]);
@@ -125,6 +126,11 @@ const Admin = () => {
             setError("Please fill in all required fields");
             return;
         }
+        // Optional: Validate link if present
+        if (jobData.link && !/^https?:\/\//i.test(jobData.link)) {
+            setError("Please enter a valid job link (must start with http:// or https://)");
+            return;
+        }
 
         if (jobData.skills.length === 0) {
             setError("Please add at least one required skill");
@@ -162,7 +168,8 @@ const Admin = () => {
                 location: "",
                 type: "remote",
                 skills: [],
-                description: ""
+                description: "",
+                link: ""
             });
             setSkillInput("");
             setEditingJob(null);
@@ -347,6 +354,16 @@ const Admin = () => {
                                 className={styles.textarea}
                                 required
                             />
+                            <input
+                                type="url"
+                                placeholder="Job Link (https://...)"
+                                name="link"
+                                value={jobData.link}
+                                onChange={handleJobChange}
+                                className={styles.input}
+                                pattern="https?://.+"
+                                title="Please enter a valid URL starting with http:// or https://"
+                            />
                             <div className={styles.button_group}>
                                 <button type="submit" className={styles.green_btn}>
                                     {editingJob ? 'Update Job' : 'Create Job'}
@@ -390,6 +407,13 @@ const Admin = () => {
                                             </span>
                                         ))}
                                     </div>
+                                    {job.link && (
+                                        <div style={{ margin: '8px 0' }}>
+                                            <a href={job.link} target="_blank" rel="noopener noreferrer" className={styles.apply_btn} style={{ display: 'inline-block', textAlign: 'center' }}>
+                                                Apply Now (Test Link)
+                                            </a>
+                                        </div>
+                                    )}
                                     <div className={styles.button_group}>
                                         <button
                                             onClick={() => handleEditJob(job)}

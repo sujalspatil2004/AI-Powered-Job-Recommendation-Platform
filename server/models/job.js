@@ -7,6 +7,7 @@ const jobSchema = new mongoose.Schema({
     type: { type: String, required: true, enum: ['remote', 'onsite', 'hybrid'] },
     skills: [{ type: String, required: true }],
     description: { type: String, required: true },
+    link: { type: String },
     createdAt: { type: Date, default: Date.now }
 });
 
